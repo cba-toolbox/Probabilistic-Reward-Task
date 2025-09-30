@@ -6,6 +6,107 @@
   <script src="Probabilistic-Reward-Task/plugins.js"></script>
   <script src="jatos.js"></script>
   <link href="Probabilistic-Reward-Task/jspsych/dist/jspsych.css" rel="stylesheet" type="text/css" />
+    <style>
+
+    div {
+      font-size: 24px;
+      line-height: 1.8em;
+      text-align: center;
+    }
+  
+    /* キーナビゲーションを表示します。*/
+    #keynavi {
+      font-size: 40px;
+      font-weight: bold;
+      color: blue;
+      text-align: center;
+      display: inline-block;
+      box-sizing: border-box;
+      height: 50px;
+      position: absolute;
+      transform: translate(-50%, 0%);
+      top: 5vh;
+    }
+  
+    /* インストラクションを画面上部に表示します */
+    #instruction_message1 {
+      display: block;
+      box-sizing: border-box;
+      position: absolute;
+      transform: translate(-50%, 0%);
+      left: 50%;
+      top: 20vh;
+    }
+  
+    /* 2 つの顔画像を整列して配置します。*/
+    #instruction_face {
+      display: inline-block;
+      box-sizing: border-box;
+      width: 70vw;
+      position: absolute;
+      transform: translate(-50%, 0%);
+      left: 50%; 
+      top: 40vh
+    }
+    
+    /* 顔画像を配置します。*/
+    .face {
+      display: inline-block;
+      box-sizing: border-box;
+      width: 10vw;
+    }
+  
+    /* 2 つの顔画像に対応するキーを整列して配置します。*/
+    #instruction_key {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100vw;
+    position: absolute;
+    transform: translate(-50%, 0%);
+    top: 60vh;
+  }
+  
+    /* 顔画像に対応するキー説明を配置します。*/
+    .key {
+      display: inline-block;
+      height: 5vh;
+      width: 30vw;
+    }
+  
+    /* インストラクションを画面中央下部に表示します */
+    #instruction_message2 {
+      display: block;
+      box-sizing: border-box;
+      position: absolute;
+      transform: translate(-50%, 0%);
+      left: 50%;
+      top: 70vh;
+    }
+  
+    /* キーを押して課題を始めるメッセージを画面下部に配置します。*/
+    #startmessage {
+      display: block;
+      box-sizing: border-box;
+      height: 30px;
+      width: 100%;
+      position: absolute;
+      transform: translate(-50%, 0%);
+      left: 50%;
+      top: 85vh;
+    }
+  
+    /* ストップウォッチを設定をします。*/
+    #stopwatch {
+      font-size: 60px;
+      color: #FFFF00;
+      background: #000000;
+      line-height: 80px;
+      padding: 15px 10px;
+      display: inline-block;
+      width: 200px;
+    }
+  
+    </style>
  </head>
  <body></body>
  <script type="text/javascript" src="Probabilistic-Reward-Task/init_run/jatos_jspsych_init.js"></script>
