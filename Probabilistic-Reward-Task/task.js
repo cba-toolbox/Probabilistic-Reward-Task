@@ -33,11 +33,12 @@ const getUserDefinedSettings = () => ({
   /**
    * 刺激に用いる画像ファイルの名前を指定します。
    * signal (口の無い顔)、short (短い口の顔)、long (長い口の顔) について設定します。
+   * long:short = 13:11.5 の比率 at
    */
   stimuli: [
     { mouth: 'signal', image: 'face-signal.png' },
     { mouth: 'short', image: 'face-with-mouth-short.png' },
-    { mouth: 'long', image: 'face-with-mouth-long.png' },
+    { mouth: 'long', image: 'face-with-mouth-long_ver.png' },
   ],
 
   /**
@@ -58,9 +59,9 @@ const getUserDefinedSettings = () => ({
 
   /**
    * 顔画像の高さ (px) です。
-   * デフォルトでは画面高さの 75% に設定しています。
+   * デフォルトでは画面高さの 18% に設定しています。
    */
-  faceImageheight: window.screen.height * 0.75,
+  faceImageheight: window.screen.height * 0.18,
 
   /**
    * フィードバックが表示される時間 (msec) です。
@@ -80,7 +81,7 @@ const getUserDefinedSettings = () => ({
   /**
    * rewardAmount の単位です。
    */
-  unit: '円',
+  unit: 'ポイント',
 
 });
 
@@ -126,7 +127,7 @@ const prepareTimeline = () => {
     // マウス カーソルを表示にします。
     setCursorVisibility(true),
 
-    // 課題の終了文を表示します。 
+    // 課題の終了文を表示します。
     showEndInstruction(timeline),
 
     // フルスクリーン表示を解除します。
@@ -164,7 +165,7 @@ const setFullScreen = () => {
 
 /**
  * 試行に必要な画像データを事前にロードします。
- * @param {*} settings 
+ * @param {*} settings
  */
 const preloadData = (settings) => {
   let imageData = [];
@@ -224,8 +225,8 @@ const showTaskInstruction = (settings, phase) => {
           口の長さに応じて 2 つのカテゴリにイラストを分類してください。</div>
           ${instructionImage}
         <div id="instruction_message2">
-          本番では、イラストを正しく分類すると報酬が出ます。<br>
-          できるだけ多くの金額を獲得するように選択してください。</div>
+          本番では、イラストを正しく分類するとポイントが獲得できます。<br>
+          できるだけ多くのポイントを獲得するように選択してください。</div>
         <div id="startmessage">スペース キーを押すと、分類方法の説明が始まります。</div>`;
     // 練習を始める際の教示文です。
     } else if (phase == 'practice') {
@@ -241,13 +242,10 @@ const showTaskInstruction = (settings, phase) => {
       return `
         <div id="instruction_message1">
           それでは、本番を始めます。<br>
-          本番では、イラストを正しく分類すると報酬がでます。<br>
-          正しい分類 1 回につき、${settings.rewardAmount} ${settings.unit} を獲得できます。<br>
-          ただし、すべての正しい分類に対して報酬があるわけではありません。<br>
-          できるだけ多くの金額を獲得するように選択してください。</div>
+          <b>イラストを正しく分類すると ${settings.rewardAmount} ${settings.unit} 獲得できることがあります。</b><br>
+          <b>すべての正しい分類でポイントが獲得できるわけではありません。</b><br></div>
         <div id="instruction_message2">
-          口の長さがわずかに違う顔のイラストが一瞬だけ表示されます。<br>
-          口の長さに応じて 2 つのカテゴリにイラストを分類してください。</div>
+          <b>できるだけ多くのポイントを獲得するように選択してください。</b></div>
          ${instructionImage}<br>
         <div id="startmessage">スペース キーを押すと、本番が始まります。</div>`;
     }
@@ -264,9 +262,9 @@ const showTaskInstruction = (settings, phase) => {
 
   // 課題が始まることを喚起する文章を定義します。
   const getReady = {
-    stimulus: `<div>準備をしてください。<br>指を F キーと J キーに置いてください。</div>`,
-    trial_duration: 5000,
-    choices: 'NO_KEYS',
+    stimulus: `<div><br>指を F キーと J キーに置いてください。<br>準備ができたらスペースキーを押してください。</div>`,
+    //trial_duration: 5000,
+    choices: ' ',
     data: {
       name: 'instruction' + `${phase}`
     }
@@ -400,7 +398,7 @@ const signal_withPrompt = (settings) => {
       return `
       <div id="keynavi" style="left: 35%;">${settings.keynaviMap.get(settings.taskPattern.f.mouth)}</div>
       <div id="keynavi" style="left: 65%;">${settings.keynaviMap.get(settings.taskPattern.j.mouth)}</div>
-      <div style="position: absolute; transform: translate(-50%, 0%); left: 50%; top: 90vh; font-size: 24px;">
+      <div style="position: absolute; transform: translate(-50%, 0%); left: 50%; top: 70vh; font-size: 24px;">
       ${jsPsych.timelineVariable('prompt')}の顔が表示されました。
       ${keyExpression} キーを押してください。</div>`},
     data: {
@@ -514,7 +512,7 @@ const signal_withPrompt = (settings) => {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: () => {
       // キー反応の正誤を取得します。
-      return jsPsych.data.get().last(1).values()[0].correct ? `<div style="font-size: 40pt; color: #00B050;">正解です。</div>` : `<div style="font-size: 40pt; color: #FF0000">不正解です。</div>`;
+      return jsPsych.data.get().last(1).values()[0].correct ? `<div style="font-size: 40pt; color: #00B050;">正解</div>` : `<div style="font-size: 40pt; color: #FF0000">不正解</div>`;
     },
   trial_duration: settings.feedbackDuration,
   choices: 'NO_KEYS',
@@ -536,8 +534,7 @@ const rewardFeedback = (settings) => {
     if (jsPsych.data.feedbackFlag) {
       totalAmount += settings.rewardAmount;
       return `
-      <div style="font-size: 40pt; color: #00B050;">正解です。${settings.rewardAmount} ${settings.unit}を獲得しました。<br>
-      累計で ${totalAmount}  ${settings.unit}を獲得しました。</div>`;
+      <div style="font-size: 40pt; color: #00B050;">${settings.rewardAmount} ${settings.unit}獲得<br></div>`;
     } else {
       return '';
     }
@@ -584,7 +581,7 @@ const timer = (settings) => ({
   },
   data: {
     name: 'break time',
-  } 
+  }
 });
 
 /**
@@ -594,11 +591,9 @@ const timer = (settings) => ({
 const showEndInstruction = () => ({
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `
-    <p style="font-size: 24px; line-height: 1.8em; text-align: left; width: 800px;">
-    課題は終了しました。<br>
-    キーボードのキーをどれか押すと、結果が保存され、課題画面が消えます。<br>
-    その後、ブラウザーを閉じてください。<br>
-    ご参加、ありがとうございました。</p>`,
+  <p style="font-size: 24px; line-height: 1.8em; text-align: left; width: 800px;">
+  　この課題は終了です。<br>
+    キーボードのキーをどれか押すと、結果が保存されて，次の課題に進みます<br>`,
   choices: "ALL_KEYS",
   post_trial_gap: 1000,
   data: {
@@ -657,8 +652,8 @@ const prepareSettings = () => {
 
   // 口の長さに対応するキー ナビゲーションの表記を設定します。
   usersettings.keynaviMap = new Map();
-  usersettings.keynaviMap.set('short', '短い口');
-  usersettings.keynaviMap.set('long', '長い口');
+  usersettings.keynaviMap.set('short', '<b>短い口</b>');
+  usersettings.keynaviMap.set('long', '<b>長い口</b>');
 
   // 口の長さに対応するキーを取得します。
   usersettings.key_short = (usersettings.taskPattern.f.mouth == 'short') ? 'f' : 'j';
@@ -708,7 +703,7 @@ const generateStimulusPattern = (settings) => {
         frequent.push( { stimulus : imageJ, correct_key: 'j', frequency: 'frequent', reward: false } );
       }
     }
-  
+
     // infrequent 刺激の設定をします。
     let infrequent = [];
     // infrequent 刺激の reward の場合の設定をします。
@@ -795,7 +790,7 @@ const generateStimulusPattern = (settings) => {
   }
 
   // testPattern(stimulusPattern); 刺激パターンのテストです。
-  
+
   return stimulusPattern;
 };
 
@@ -872,4 +867,3 @@ const testPattern = (stimulusPattern) => {
  * jsPsych が定義された課題シーケンスを実行します。
  */
 var timeline = prepareTimeline();
-
